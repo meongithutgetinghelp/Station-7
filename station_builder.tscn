@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bj6185cp1seho"]
+
+[ext_resource type="Script" uid="uid://csow52nkoqb7t" path="res://station_builder.gd" id="1_diphy"]
+[ext_resource type="PackedScene" uid="uid://xhet16blx74" path="res://player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://entity_model_preview.tscn" id="3_preview"]
+
+[ext_resource type="PackedScene" path="res://rooms/restroom.tscn" id="4_restroom"]
+
+[ext_resource type="PackedScene" path="res://rooms/security.tscn" id="5_security"]
+
+[ext_resource type="PackedScene" path="res://rooms/electrical.tscn" id="6_electrical"]
+
+[ext_resource type="PackedScene" path="res://rooms/storage.tscn" id="7_storage"]
+
+[node name="Station builder" type="Node3D" unique_id=1113310207]
+script = ExtResource("1_diphy")
+
+[node name="Player" parent="." unique_id=875716573 instance=ExtResource("2_player")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, -14)
+
+[node name="EntityModelPreview" parent="." unique_id=78513303 instance=ExtResource("3_preview")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -0.34958085, -15)
+
+[node name="Rooms" type="Node3D" parent="."]
+
+[node name="Restroom" parent="Rooms" instance=ExtResource("4_restroom")]
+position = Vector3(23.5, 0.35, -5)
+
+[node name="Security" parent="Rooms" instance=ExtResource("5_security")]
+position = Vector3(20.5, 0.35, 2.5)
+
+[node name="Electrical" parent="Rooms" instance=ExtResource("6_electrical")]
+position = Vector3(20.5, 0.35, 7.5)
+
+[node name="Storage" parent="Rooms" instance=ExtResource("7_storage")]
+position = Vector3(20.5, 0.35, -11)

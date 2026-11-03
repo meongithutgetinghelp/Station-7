@@ -1,0 +1,465 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Platform 7 Hands</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: 3D stage on the left, departure-board pose list on the right; stacks on phones. Dark by choice: the game is a night shift. */
+:root{
+  --bg:#0c1013; --panel:#131a1e; --line:#25313a; --fg:#d9e1e4; --muted:#8796a0;
+  --accent:#e9a43c; --accent-ink:#1a1204;
+  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{
+  margin:0; color:var(--fg); font:15px/1.5 var(--body);
+  padding-block:20px 28px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+h1{margin:0;font:800 clamp(30px,5vw,44px)/1 var(--display);letter-spacing:.02em;text-transform:uppercase;text-wrap:balance}
+header p{margin:0;color:var(--muted);font-size:14px}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}
+.stage{position:relative;min-width:0;background:#0a0e11;border:1px solid var(--line);border-radius:6px;overflow:hidden;aspect-ratio:4/3;min-height:340px;touch-action:none;cursor:grab}
+.stage.drag{cursor:grabbing}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tag{position:absolute;left:14px;top:12px;display:flex;align-items:baseline;gap:10px;pointer-events:none}
+.tag b{font:500 12px var(--mono);color:var(--accent-ink);background:var(--accent);padding:2px 7px;border-radius:2px;letter-spacing:.06em}
+.tag span{font:700 22px/1 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.hint{position:absolute;left:14px;bottom:11px;font:400 11.5px var(--mono);color:var(--muted);pointer-events:none;letter-spacing:.03em}
+.views{position:absolute;right:12px;top:10px;display:flex;gap:6px}
+button{font:inherit;color:inherit}
+.chip{font:500 12px var(--mono);letter-spacing:.04em;background:rgba(19,26,30,.86);border:1px solid var(--line);border-radius:3px;padding:6px 10px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip:hover{border-color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts{position:absolute;right:12px;bottom:10px;display:flex;gap:6px}
+#nogl{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted)}
+.board{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.board li+li{border-top:1px solid var(--line)}
+.row{width:100%;display:grid;grid-template-columns:34px 1fr;gap:2px 10px;text-align:left;background:none;border:0;padding:10px 14px;cursor:pointer}
+.row:hover{background:#18222a}
+.row .n{grid-row:span 2;font:500 15px/1.35 var(--mono);color:var(--muted);align-self:start;padding-top:3px}
+.row .t{font:700 19px/1.15 var(--display);letter-spacing:.04em;text-transform:uppercase}
+.row .d{font-size:13px;color:var(--muted);line-height:1.4}
+.row[aria-current="true"]{background:var(--accent);color:var(--accent-ink)}
+.row[aria-current="true"] .n,.row[aria-current="true"] .d{color:#3a2a0b}
+.note{margin:0;color:var(--muted);font-size:13px;max-width:70ch}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}.stage{aspect-ratio:1/1;min-height:320px}.hint{display:none}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Platform 7 Hands</h1>
+    <p>First-person hand rig for the night-shift attendant, shown in 8 poses. Skin tone matched to your reference photos.</p>
+  </header>
+  <div class="app">
+    <div class="stage" id="stage">
+      <canvas id="gl" aria-label="3D hands viewer"></canvas>
+      <div class="tag"><b id="tcode">01</b><span id="tname">Relaxed</span></div>
+      <div class="views" role="group" aria-label="Camera">
+        <button class="chip" id="vOrbit" aria-pressed="true">Orbit</button>
+        <button class="chip" id="vFP" aria-pressed="false">First person</button>
+      </div>
+      <div class="hint">Drag to rotate · scroll or pinch to zoom</div>
+      <div class="opts" role="group" aria-label="Display">
+        <button class="chip" id="oSleeve" aria-pressed="true">Sleeves</button>
+        <button class="chip" id="oWire" aria-pressed="false">Wire</button>
+      </div>
+      <div id="nogl" hidden>This browser could not start WebGL, so the 3D view is unavailable.</div>
+    </div>
+    <ol class="board" id="board"></ol>
+  </div>
+  <p class="note">Hands are built from joints, so every pose is a set of finger angles you can hand to a modeler or rigger as a reference. Left hands mirror the right.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+'use strict';
+var D = Math.PI / 180;
+var stage = document.getElementById('stage');
+var canvas = document.getElementById('gl');
+var renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true }); }
+catch (e) { document.getElementById('nogl').hidden = false; return; }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0e11);
+scene.add(new THREE.HemisphereLight(0xa9c0d0, 0x20170f, 0.8));
+var key = new THREE.DirectionalLight(0xffe8c8, 1.0); key.position.set(-30, 60, 40); scene.add(key);
+var rimL = new THREE.DirectionalLight(0x6fa8ff, 0.5); rimL.position.set(50, 10, -40); scene.add(rimL);
+var camera = new THREE.PerspectiveCamera(45, 1, 1, 600);
+
+/* ---------- materials ---------- */
+var skin = new THREE.MeshStandardMaterial({ color: 0xcf9f7c, roughness: 0.62 });
+var nail = new THREE.MeshStandardMaterial({ color: 0xe6c0ae, roughness: 0.25 });
+var cloth = new THREE.MeshStandardMaterial({ color: 0x1f2d3a, roughness: 0.92 });
+var allMats = [skin, nail, cloth];
+
+/* ---------- hand model: wrist at origin, fingers +Y, palm faces +Z, thumb on +X ---------- */
+var sphereG = new THREE.SphereGeometry(1, 20, 14);
+function ball(r, mat) { var m = new THREE.Mesh(sphereG, mat || skin); m.scale.setScalar(r); return m; }
+function ell(x, y, z, sx, sy, sz, mat) { var m = ball(1, mat); m.position.set(x, y, z); m.scale.set(sx, sy, sz); return m; }
+function seg(len, r0, r1) {
+  var g = new THREE.CylinderGeometry(r1, r0, len, 16, 1); g.translate(0, len / 2, 0);
+  return new THREE.Mesh(g, skin);
+}
+function chain(root, lens, r) {
+  var joints = [], parent = root;
+  for (var i = 0; i < lens.length; i++) {
+    var j = new THREE.Group();
+    if (i > 0) j.position.y = lens[i - 1];
+    parent.add(j); joints.push(j);
+    var r1 = r * 0.85;
+    j.add(ball(r)); j.add(seg(lens[i], r, r1));
+    parent = j; r = r1;
+  }
+  var last = joints[joints.length - 1], L = lens[lens.length - 1];
+  var tip = ball(r); tip.position.y = L; last.add(tip);
+  var n = ell(0, L - 0.95, -r * 0.72, r * 0.78, 0.95, r * 0.3, nail); last.add(n);
+  return joints;
+}
+var FINGER_DEFS = [
+  { x: 2.55, y: 8.0, len: [4.1, 2.4, 1.9], r: 0.80 },
+  { x: 0.85, y: 9.0, len: [4.5, 2.8, 2.0], r: 0.82 },
+  { x: -0.85, y: 8.6, len: [4.1, 2.6, 1.9], r: 0.78 },
+  { x: -2.45, y: 7.5, len: [3.3, 2.0, 1.8], r: 0.68 }
+];
+var SPREAD = [-1, 0, 1, 1];
+
+function makeHandModel() {
+  var hand = new THREE.Group();
+  hand.add(ell(0, 4.8, 0, 3.9, 4.7, 1.35));
+  hand.add(ell(2.3, 2.7, 0.8, 1.7, 2.3, 0.9));
+  hand.add(ell(-2.3, 3.3, 0.5, 1.4, 3.1, 0.75));
+  hand.add(ell(0, 0.2, 0, 2.7, 1.9, 1.5));
+  var fa = new THREE.Mesh(new THREE.CylinderGeometry(2.45, 3.2, 26, 20, 1), skin);
+  fa.geometry.translate(0, -13, 0); fa.scale.z = 0.85; hand.add(fa);
+  var sl = new THREE.Mesh(new THREE.CylinderGeometry(3.05, 3.9, 22, 20, 1, true), cloth);
+  sl.geometry.translate(0, -17, 0); sl.scale.z = 0.88; sl.material = cloth; hand.add(sl);
+  var cap = new THREE.Mesh(new THREE.RingGeometry(2.7, 3.05, 20), cloth);
+  cap.rotation.x = Math.PI / 2; cap.position.y = -6; hand.add(cap);
+  var fingers = FINGER_DEFS.map(function (d) {
+    var root = new THREE.Group(); root.position.set(d.x, d.y, 0); hand.add(root);
+    var js = chain(root, d.len, d.r); js[0].rotation.order = 'ZXY'; return js;
+  });
+  var tRoot = new THREE.Group(); tRoot.position.set(2.9, 1.3, 0.5); hand.add(tRoot);
+  var thumb = chain(tRoot, [3.7, 3.1, 2.5], 0.98); thumb[0].rotation.order = 'ZXY';
+  return { group: hand, fingers: fingers, thumb: thumb, sleeve: [sl, cap] };
+}
+function applyAngles(m, f, t) {
+  for (var i = 0; i < 4; i++) {
+    var j = m.fingers[i], a = f[i];
+    j[0].rotation.set(a[0] * D, 0, SPREAD[i] * a[3] * D);
+    j[1].rotation.x = a[1] * D; j[2].rotation.x = a[2] * D;
+  }
+  m.thumb[0].rotation.set((t[0] + 14) * D, t[1] * D, -(52 + t[2]) * D);
+  m.thumb[1].rotation.x = t[3] * D; m.thumb[2].rotation.x = t[4] * D;
+}
+
+/* ---------- rigs (one per hand) ---------- */
+function makeRig(left) {
+  var wrap = new THREE.Group(), model = makeHandModel();
+  if (left) model.group.scale.x = -1;
+  wrap.add(model.group); scene.add(wrap);
+  var props = new THREE.Group(); wrap.add(props);
+  return { wrap: wrap, model: model, props: props, left: left,
+    f: [[12, 18, 8, 4], [16, 22, 10, 0], [20, 25, 12, 3], [26, 28, 12, 6]], t: [10, 0, 6, 8, 10], tgt: null };
+}
+var rigs = { R: makeRig(false), L: makeRig(true) };
+var worldProps = new THREE.Group(); scene.add(worldProps);
+
+var _x = new THREE.Vector3(), _y = new THREE.Vector3(), _z = new THREE.Vector3(), _m = new THREE.Matrix4();
+function basisQuat(s) {
+  _y.fromArray(s.fd).normalize();
+  if (s.xd) {
+    _x.fromArray(s.xd); _x.addScaledVector(_y, -_x.dot(_y)).normalize(); _z.crossVectors(_x, _y);
+  } else {
+    _z.fromArray(s.pd); _z.addScaledVector(_y, -_z.dot(_y)).normalize(); _x.crossVectors(_y, _z);
+  }
+  _m.makeBasis(_x, _y, _z);
+  return new THREE.Quaternion().setFromRotationMatrix(_m);
+}
+function resolve(s) {
+  var q = basisQuat(s), pos = new THREE.Vector3();
+  if (s.at) {
+    var pin = new THREE.Vector3().fromArray(s.pin || [0, 0, 0]).applyQuaternion(q);
+    pos.fromArray(s.at).sub(pin);
+  } else pos.fromArray(s.p);
+  return { pos: pos, q: q, f: s.f, t: s.t };
+}
+function mirror(s) {
+  var o = {}; for (var k in s) o[k] = s[k];
+  ['p', 'at', 'fd', 'pd', 'xd'].forEach(function (k) { if (s[k]) o[k] = [-s[k][0], s[k][1], s[k][2]]; });
+  return o;
+}
+
+/* ---------- props ---------- */
+cloth.side = THREE.DoubleSide;
+function mat(c, r, m) { var x = new THREE.MeshStandardMaterial({ color: c, roughness: r == null ? 0.6 : r, metalness: m || 0 }); allMats.push(x); return x; }
+var mMetal = mat(0x2b333a, 0.38, 0.65), mBrass = mat(0xb68a3c, 0.35, 0.7), mPaper = mat(0xe8e2d2, 0.9),
+    mCover = mat(0x16324a, 0.7), mDesk = mat(0x1d252b, 0.85), mRubber = mat(0x15181b, 0.9),
+    mWood = mat(0x7a5232, 0.7), mRed = mat(0x9c2f27, 0.6), mKey = mat(0x2a3037, 0.6), mBase = mat(0x14191d, 0.6),
+    mPole = mat(0x9aa6ae, 0.35, 0.6), mMop = mat(0xcfc9b8, 0.95), mPhone = mat(0x101417, 0.35, 0.5);
+var mGlow = new THREE.MeshBasicMaterial({ color: 0xfff0c8 });
+var mScreen = new THREE.MeshBasicMaterial({ color: 0x2f5f86 });
+var mBeam = new THREE.MeshBasicMaterial({ color: 0xffe9b0, transparent: true, opacity: 0.1, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+function box(w, h, d, m, x, y, z) { var b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x || 0, y || 0, z || 0); return b; }
+function cyl(rt, rb, h, m, x, y, z) { var c = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 24), m); c.position.set(x || 0, y || 0, z || 0); return c; }
+
+function flashlight() {            /* axis along local X, lens toward -X */
+  var g = new THREE.Group(), a = new THREE.Group(); a.rotation.z = Math.PI / 2; g.add(a);
+  a.add(cyl(1.85, 1.85, 13, mMetal, 0, 0, 0));
+  a.add(cyl(2.95, 1.85, 3.4, mMetal, 0, -8.2, 0));        /* head flares toward -X after rotation */
+  a.children[1].position.y = 8.2;
+  a.add(cyl(1.95, 1.95, 1.2, mBrass, 0, -6.9, 0));
+  a.add(cyl(2.55, 2.55, 0.25, mGlow, 0, 9.95, 0));
+  var beam = new THREE.Mesh(new THREE.CylinderGeometry(13, 2.5, 55, 28, 1, true), mBeam);
+  beam.position.y = 37.5; a.add(beam);
+  return g;
+}
+function passport() {
+  var g = new THREE.Group();
+  g.add(box(8.8, 12.5, 0.5, mCover));
+  var ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.14, 8, 32), mBrass); ring.position.z = 0.28; g.add(ring);
+  g.add(box(4.2, 0.25, 0.05, mBrass, 0, 3.6, 0.27));
+  g.add(box(3.2, 0.2, 0.05, mBrass, 0, -3.3, 0.27));
+  g.add(box(0.5, 12.0, 0.36, mPaper, 4.3, 0, -0.02));
+  return g;
+}
+function stamp() {                 /* axis along local Z, knob against the palm, rubber face away from it */
+  var g = new THREE.Group(), a = new THREE.Group(); a.rotation.x = -Math.PI / 2; a.position.z = 10.4; g.add(a);
+  a.add(box(6.6, 1.0, 4.4, mRubber, 0, 0.5, 0));
+  a.add(box(6.0, 0.5, 3.8, mRed, 0, -0.05, 0));
+  a.add(cyl(1.9, 2.2, 5.6, mWood, 0, 3.8, 0));
+  a.add(cyl(3.3, 3.0, 2.4, mWood, 0, 7.8, 0));
+  return g;
+}
+function phone() {
+  var g = new THREE.Group();
+  g.add(box(15, 7.2, 0.9, mPhone));
+  var s = box(14.2, 6.5, 0.05, mScreen, 0, 0, 0.47); g.add(s);
+  g.add(box(10, 0.5, 0.06, mGlow, 0, 1.6, 0.5)); g.add(box(6, 0.4, 0.06, mGlow, -2, 0.3, 0.5));
+  g.add(box(8, 0.4, 0.06, mGlow, -1, -0.8, 0.5));
+  return g;
+}
+function mop() {                   /* shaft along local +Y; origin at the grip line */
+  var g = new THREE.Group();
+  g.add(cyl(1.0, 1.0, 140, mPole, 0, 0, 0));
+  var head = new THREE.Group(); head.position.y = -70; g.add(head);
+  head.add(box(15, 1.6, 4.5, mMetal, 0, 0, 0));
+  for (var i = 0; i < 14; i++) { var s = cyl(0.55, 0.3, 11, mMop, -6.6 + i * 1.02, -6, ((i % 3) - 1) * 0.9); s.rotation.z = ((i % 5) - 2) * 0.05; head.add(s); }
+  return g;
+}
+function desk() { var g = new THREE.Group(); g.add(box(80, 1.5, 44, mDesk, 0, -20.75, -30)); return g; }
+function sheet(x, z, rot, w, d) { var s = box(w || 8.5, 0.12, d || 11, mPaper, x, -19.9, z); s.rotation.y = rot; return s; }
+function papers() {
+  var g = new THREE.Group();
+  g.add(sheet(-3, -34, 0.35)); g.add(sheet(6, -33, -0.25)); g.add(sheet(1, -29, 0.1)); g.add(sheet(-11, -31, -0.5));
+  g.children[2].position.y = -19.78; g.children[1].position.y = -19.84;
+  return g;
+}
+function ticket() {
+  var g = new THREE.Group(), t = box(12, 0.12, 6, mPaper, 0, -19.9, -31); g.add(t);
+  g.add(box(12, 0.14, 1.1, mCover, 0, -19.89, -33.2)); g.add(box(3.5, 0.14, 0.4, mRed, 3.4, -19.89, -30.2));
+  return g;
+}
+function keyboard() {
+  var g = new THREE.Group();
+  g.add(box(31, 1.4, 11.5, mBase, 0, 0, 0));
+  for (var r = 0; r < 4; r++) for (var c = 0; c < 14; c++) {
+    var k = box(1.7, 0.7, 1.6, mKey, -13.9 + c * 2.14 + (r % 2) * 0.5, 1.0, -4 + r * 2.15); g.add(k);
+  }
+  g.add(box(11, 0.7, 1.6, mKey, 0, 1.0, 4.6));
+  g.position.set(0, -19.2, -30); g.rotation.x = 0.07;
+  return g;
+}
+
+/* ---------- finger sets (degrees): [mcp, pip, dip, spread] x4 ; thumb [flex, twist, spread, mcp, ip] ---------- */
+var F = {
+  relaxed: [[12, 18, 8, 4], [16, 22, 10, 0], [20, 25, 12, 3], [26, 28, 12, 6]],
+  torch:   [[68, 88, 48, 0], [74, 92, 50, 0], [78, 94, 50, 0], [82, 96, 46, 0]],
+  flat:    [[2, 4, 2, 6], [0, 3, 2, 0], [1, 4, 2, 4], [2, 4, 2, 9]],
+  type:    [[24, 42, 16, 3], [28, 46, 16, 0], [26, 44, 15, 3], [24, 40, 12, 5]],
+  open:    [[16, 20, 8, 10], [12, 16, 6, 3], [16, 20, 8, 4], [22, 26, 10, 10]],
+  pinch:   [[44, 40, 22, 4], [20, 24, 10, 3], [22, 28, 12, 4], [26, 30, 12, 8]],
+  stamp:   [[56, 78, 28, 2], [60, 82, 30, 0], [62, 84, 30, 2], [64, 84, 26, 4]],
+  pole:    [[78, 92, 52, 0], [82, 96, 54, 0], [84, 98, 52, 0], [86, 98, 48, 0]],
+  doc:     [[34, 52, 24, 2], [40, 58, 26, 0], [44, 60, 26, 2], [48, 62, 24, 4]],
+  phone:   [[34, 66, 34, 2], [40, 70, 36, 0], [44, 72, 36, 2], [48, 72, 32, 4]]
+};
+var T = {
+  relaxed: [10, 0, 6, 8, 10], torch: [36, 30, 8, 22, 18], flat: [4, 0, 14, 4, 4], type: [8, 0, 10, 10, 8],
+  pinch: [24, 28, 14, 26, 14], stamp: [30, 24, 8, 26, 16], pole: [34, 30, 6, 24, 16], doc: [30, 36, 10, 24, 16],
+  phone: [18, 20, 20, 8, 6]
+};
+function vec(a) { var l = Math.hypot(a[0], a[1], a[2]); return [a[0] / l, a[1] / l, a[2] / l]; }
+
+var restR = { p: [15, -31, -16], fd: [0.12, -0.45, -0.88], pd: [-0.9, -0.4, 0.1], f: F.relaxed, t: T.relaxed };
+var restL = mirror(restR);
+var deskLeft = { p: [-13, -18.6, -27], fd: [0.25, 0, -1], pd: [0, -1, 0], f: F.flat, t: T.flat };
+var mopD = vec([0.12, 0.82, 0.56]);
+function mopPt(t) { return [4 + mopD[0] * t, -21 + mopD[1] * t, -34 + mopD[2] * t]; }
+
+/* ---------- the 8 poses ---------- */
+var deskProps = [desk];
+var POSES = [
+  { name: 'Relaxed', desc: 'Idle, standing or seated. Fingers soft, thumbs forward.',
+    R: restR, L: restL, focus: [0, -31, -26], dist: 70, pitch: -34 },
+  { name: 'Flashlight grip', desc: 'Right hand wraps the torch, thumb at the tail.',
+    R: { at: [9, -15, -31], pin: [0, 6.2, 3.1], xd: [0, -0.12, 1], fd: [-0.2, 0.95, -0.25], f: F.torch, t: T.torch },
+    L: restL, holdR: flashlight, holdRpin: [0, 6.2, 3.1], focus: [4, -22, -28], dist: 70, pitch: -30 },
+  { name: 'Document grip', desc: 'Both hands pinch a passport or ticket, thumbs on the front.',
+    R: { at: [4.4, -10, -26.4], pin: [2.4, 8.6, 1.5], fd: [-0.55, -0.1, -0.83], pd: [-0.55, 0.3, 0.78], f: F.doc, t: T.doc },
+    L: { at: [-4.4, -10, -26.4], pin: [2.4, 8.6, 1.5], fd: [0.55, -0.1, -0.83], pd: [0.55, 0.3, 0.78], f: F.doc, t: T.doc },
+    world: [function () { var p = passport(); p.position.set(0, -4, -27); p.rotation.x = -0.12; return p; }],
+    focus: [0, -10, -28], dist: 62, pitch: -22 },
+  { name: 'Reach and pick up', desc: 'Right hand opens toward papers on the counter, pinching one corner.',
+    R: { at: [6, -17.4, -35], pin: [1.7, 12.6, 1.2], fd: [-0.2, -0.45, -0.87], pd: [-0.25, -0.85, 0.45], f: F.pinch, t: T.pinch },
+    L: deskLeft, world: [desk, papers], focus: [0, -20, -30], dist: 70, pitch: -36 },
+  { name: 'Stamp grip', desc: 'Right palm on the knob, pressing the stamp onto the ticket.',
+    R: { at: [3, -9.4, -31], pin: [0, 6, 0], fd: [0, 0, -1], pd: [0, -1, 0], f: F.stamp, t: T.stamp },
+    L: { p: [-11, -18.6, -27], fd: [0.3, 0, -1], pd: [0, -1, 0], f: F.flat, t: T.flat },
+    holdR: stamp, holdRpin: [0, 6, 0], world: [desk, ticket], focus: [0, -17, -30], dist: 66, pitch: -34 },
+  { name: 'Keyboard pose', desc: 'Both hands hover over the keys, fingertips curved.',
+    R: { p: [7, -13.6, -23], fd: [-0.1, -0.12, -1], pd: [0, -1, 0], f: F.type, t: T.type },
+    L: { p: [-7, -13.6, -23], fd: [0.1, -0.12, -1], pd: [0, -1, 0], f: F.type, t: T.type },
+    world: [desk, keyboard], focus: [0, -17, -29], dist: 64, pitch: -36 },
+  { name: 'Cleaning-tool grip', desc: 'Both hands on the mop pole, thumbs toward the top.',
+    R: { at: mopPt(0), pin: [0, 6.2, 2.3], xd: mopD, fd: [-0.8, -0.1, -0.5], f: F.pole, t: T.pole },
+    L: { at: mopPt(13), pin: [0, 6.2, 2.3], xd: [-mopD[0], -mopD[1], -mopD[2]], fd: [0.8, -0.1, -0.5], f: F.pole, t: T.pole },
+    world: [function () {
+      var m = mop(); m.position.set.apply(m.position, mopPt(0)); m.position.y -= 0;
+      m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3().fromArray(mopD)); return m; }],
+    focus: [4, -14, -30], dist: 80, pitch: -34 },
+  { name: 'Phone grip', desc: 'Right hand cradles the phone, fingers around the left edge.',
+    R: { at: [5, -8, -26], pin: [0.5, 5.3, 2.0], fd: [-1, 0.15, 0], pd: [0, 0.25, 1], f: F.phone, t: T.phone },
+    L: restL, holdR: phone, holdRpin: [0.5, 5.3, 2.0], focus: [3, -12, -26], dist: 58, pitch: -22 }
+];
+POSES.forEach(function (p) {
+  if (p.holdR) p.holdRpin = p.holdRpin || [0, 0, 0];
+});
+
+/* ---------- apply a pose ---------- */
+var current = 0, snap = true;
+function clearGroup(g) { while (g.children.length) g.remove(g.children[0]); }
+function setPose(i) {
+  current = i; var P = POSES[i];
+  rigs.R.tgt = resolve(P.R); rigs.L.tgt = resolve(P.L);
+  clearGroup(rigs.R.props); clearGroup(rigs.L.props); clearGroup(worldProps);
+  if (P.holdR) { var h = P.holdR(); h.position.fromArray(P.holdRpin); rigs.R.props.add(h); }
+  if (i === 1) { rigs.R.props.children[0].position.fromArray([0, 6.2, 3.1]); }
+  (P.world || []).forEach(function (fn) { worldProps.add(fn()); });
+  if (i === 4) rigs.R.props.children[0].position.set(0, 6, 0);
+  document.getElementById('tcode').textContent = ('0' + (i + 1)).slice(-2);
+  document.getElementById('tname').textContent = P.name;
+  var rows = document.querySelectorAll('.row');
+  rows.forEach(function (r, k) { if (k === i) r.setAttribute('aria-current', 'true'); else r.removeAttribute('aria-current'); });
+  orbit.tx = P.focus[0]; orbit.ty = P.focus[1]; orbit.tz = P.focus[2];
+  if (!fp) orbit.dist = P.dist;
+  try { history.replaceState(null, '', '#pose-' + (i + 1)); } catch (e) {}
+}
+
+/* ---------- camera ---------- */
+var orbit = { th: 0.5, ph: 1.15, dist: 70, tx: 0, ty: -25, tz: -28 };
+var fp = false;
+function placeCamera() {
+  if (fp) {
+    camera.fov = 62; camera.position.set(0, 0, 0);
+    camera.rotation.set(POSES[current].pitch * D, 0, 0);
+  } else {
+    camera.fov = 40;
+    var sp = Math.sin(orbit.ph);
+    camera.position.set(orbit.tx + orbit.dist * sp * Math.sin(orbit.th), orbit.ty + orbit.dist * Math.cos(orbit.ph),
+      orbit.tz + orbit.dist * sp * Math.cos(orbit.th));
+    camera.lookAt(orbit.tx, orbit.ty, orbit.tz);
+  }
+  camera.updateProjectionMatrix();
+}
+var drag = null, pts = {}, pinch0 = 0;
+stage.addEventListener('pointerdown', function (e) {
+  if (e.target.closest && e.target.closest('button')) return;
+  pts[e.pointerId] = [e.clientX, e.clientY]; stage.setPointerCapture(e.pointerId);
+  stage.classList.add('drag');
+  var k = Object.keys(pts); if (k.length === 2) pinch0 = Math.hypot(pts[k[0]][0] - pts[k[1]][0], pts[k[0]][1] - pts[k[1]][1]);
+});
+stage.addEventListener('pointermove', function (e) {
+  if (!pts[e.pointerId]) return;
+  var k = Object.keys(pts), prev = pts[e.pointerId];
+  if (k.length === 2) {
+    pts[e.pointerId] = [e.clientX, e.clientY];
+    var d = Math.hypot(pts[k[0]][0] - pts[k[1]][0], pts[k[0]][1] - pts[k[1]][1]);
+    if (pinch0 && !fp) orbit.dist = Math.min(160, Math.max(25, orbit.dist * pinch0 / d)); pinch0 = d; return;
+  }
+  var dx = e.clientX - prev[0], dy = e.clientY - prev[1]; pts[e.pointerId] = [e.clientX, e.clientY];
+  if (!fp) { orbit.th -= dx * 0.008; orbit.ph = Math.min(Math.PI - 0.15, Math.max(0.15, orbit.ph - dy * 0.008)); }
+});
+function endPtr(e) { delete pts[e.pointerId]; pinch0 = 0; stage.classList.remove('drag'); }
+stage.addEventListener('pointerup', endPtr); stage.addEventListener('pointercancel', endPtr);
+stage.addEventListener('wheel', function (e) {
+  if (fp) return; e.preventDefault();
+  orbit.dist = Math.min(160, Math.max(25, orbit.dist * (1 + e.deltaY * 0.001)));
+}, { passive: false });
+
+/* ---------- UI ---------- */
+var board = document.getElementById('board');
+POSES.forEach(function (p, i) {
+  var li = document.createElement('li'), b = document.createElement('button');
+  b.className = 'row'; b.type = 'button';
+  b.innerHTML = '<span class="n">' + ('0' + (i + 1)).slice(-2) + '</span><span class="t"></span><span class="d"></span>';
+  b.querySelector('.t').textContent = p.name; b.querySelector('.d').textContent = p.desc;
+  b.addEventListener('click', function () { setPose(i); });
+  li.appendChild(b); board.appendChild(li);
+});
+function toggle(id, on) { document.getElementById(id).setAttribute('aria-pressed', on ? 'true' : 'false'); }
+document.getElementById('vOrbit').addEventListener('click', function () { fp = false; toggle('vOrbit', true); toggle('vFP', false); orbit.dist = POSES[current].dist; });
+document.getElementById('vFP').addEventListener('click', function () { fp = true; toggle('vOrbit', false); toggle('vFP', true); });
+var sleeveOn = true;
+document.getElementById('oSleeve').addEventListener('click', function () {
+  sleeveOn = !sleeveOn; toggle('oSleeve', sleeveOn);
+  [rigs.R, rigs.L].forEach(function (r) { r.model.sleeve.forEach(function (s) { s.visible = sleeveOn; }); });
+});
+document.getElementById('oWire').addEventListener('click', function () {
+  var on = document.getElementById('oWire').getAttribute('aria-pressed') !== 'true'; toggle('oWire', on);
+  allMats.forEach(function (m) { m.wireframe = on; });
+});
+window.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') setPose((current + 1) % POSES.length);
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') setPose((current + POSES.length - 1) % POSES.length);
+});
+
+/* ---------- loop ---------- */
+function resize() {
+  var w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+function lerpArr(a, b, k) { for (var i = 0; i < a.length; i++) a[i] = Array.isArray(a[i]) ? lerpArr(a[i], b[i], k) : a[i] + (b[i] - a[i]) * k; return a; }
+var last = performance.now();
+function frame(now) {
+  var dt = Math.min(0.05, (now - last) / 1000); last = now;
+  var k = snap ? 1 : 1 - Math.exp(-dt * 9); snap = false;
+  [rigs.R, rigs.L].forEach(function (r) {
+    r.wrap.position.lerp(r.tgt.pos, k); r.wrap.quaternion.slerp(r.tgt.q, k);
+    lerpArr(r.f, r.tgt.f, k); lerpArr(r.t, r.tgt.t, k);
+    applyAngles(r.model, r.f, r.t);
+  });
+  placeCamera(); renderer.render(scene, camera); requestAnimationFrame(frame);
+}
+resize();
+var start = 0, m = /pose-(\d)/.exec(location.hash || ''); if (m && +m[1] >= 1 && +m[1] <= 8) start = +m[1] - 1;
+setPose(start); snap = true;
+window.__setPose = setPose; window.__fp = function (v) { fp = v; };
+requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

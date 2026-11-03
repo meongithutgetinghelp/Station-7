@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://noticeboard_note.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+text = "STAFF ROTA\n\nNight 1\n02:00 - 06:00"
+paper_color = Color(0.72, 0.88, 0.84, 1)

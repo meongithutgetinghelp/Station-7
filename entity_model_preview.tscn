@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/entity/the_passenger_rigged.glb" id="1_model"]
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.16, 0.19, 0.22, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(10, 0.2, 10)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(10, 0.2, 10)
+
+[node name="EntityModelPreview" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="DisplayPlatform" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="DisplayPlatform"]
+mesh = SubResource("Mesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="DisplayPlatform"]
+shape = SubResource("Shape_floor")
+
+[node name="PreviewLight" type="OmniLight3D" parent="."]
+position = Vector3(1, 3.5, 2.5)
+light_color = Color(0.79, 0.87, 1, 1)
+light_energy = 3.0
+omni_range = 9.0
+
+[node name="FillLight" type="OmniLight3D" parent="."]
+position = Vector3(-2, 2, -2)
+light_energy = 1.0
+omni_range = 7.0
+
+[node name="PreviewLabel" type="Label3D" parent="."]
+position = Vector3(0, 3, 0)
+billboard = 1
+text = "ENTITY MODEL PREVIEW\nF2: visit / return (solo play)"
+font_size = 38
+pixel_size = 0.006
+outline_size = 6

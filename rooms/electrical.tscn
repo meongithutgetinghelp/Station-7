@@ -1,0 +1,228 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/materials/station_floor.gdshader" id="1_e4osb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sjovn"]
+albedo_color = Color(0.89, 0.88, 0.82, 1)
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="BoxMesh_7c045"]
+size = Vector3(0.25, 4.6, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e4osb"]
+size = Vector3(0.25, 4.6, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxxey"]
+albedo_color = Color(0.36, 0.43, 0.41, 1)
+metallic = 0.65
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="BoxMesh_f26w6"]
+size = Vector3(0.29, 2.4, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f4acu"]
+size = Vector3(0.29, 2.4, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xxito"]
+size = Vector3(0.29, 2.4, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q1sld"]
+size = Vector3(0.29, 2.4, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nroer"]
+size = Vector3(0.29, 0.08, 1.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6qrqj"]
+size = Vector3(0.29, 0.08, 1.04)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pf73p"]
+albedo_color = Color(0.9, 0.45, 0.1, 1)
+roughness = 0.4
+emission = Color(1, 0.5, 0.12, 1)
+emission_energy_multiplier = 1.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_65v55"]
+size = Vector3(1.15, 0.3, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14o71"]
+size = Vector3(1.15, 0.3, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hq6n4"]
+size = Vector3(0.25, 7.35, 1.7749996)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h1ux7"]
+size = Vector3(0.25, 7.35, 1.7749996)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wk2nv"]
+size = Vector3(8.75, 7.35, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w82jn"]
+size = Vector3(8.75, 7.35, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n61md"]
+size = Vector3(1.2, 0.3, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m2ekn"]
+size = Vector3(1.2, 0.3, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l4s6g"]
+size = Vector3(0.25, 7.35, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1nwpg"]
+size = Vector3(0.25, 7.35, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6siru"]
+size = Vector3(0.25, 7.35, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1vuw8"]
+size = Vector3(0.25, 7.35, 0.25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t78bm"]
+render_priority = 0
+shader = ExtResource("1_e4osb")
+shader_parameter/stone_color = Color(0.58, 0.61, 0.55, 1)
+shader_parameter/tile_size = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_kxxey"]
+size = Vector3(9, 0.85, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f26w6"]
+size = Vector3(9, 0.85, 5)
+
+[node name="Electrical" type="Node3D" unique_id=1179271897]
+
+[node name="PropAnchor" type="Marker3D" parent="." unique_id=892263675]
+
+[node name="AISpawn" type="Marker3D" parent="." unique_id=134207383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Elec_Header" type="StaticBody3D" parent="." unique_id=482699824 groups=["authored_room_wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 4.7000003, 0)
+
+[node name="_MeshInstance3D_957" type="MeshInstance3D" parent="Elec_Header" unique_id=1120249693]
+material_override = SubResource("StandardMaterial3D_sjovn")
+mesh = SubResource("BoxMesh_7c045")
+
+[node name="_CollisionShape3D_958" type="CollisionShape3D" parent="Elec_Header" unique_id=146756991]
+shape = SubResource("BoxShape3D_e4osb")
+
+[node name="ElecDoor_JambL" type="StaticBody3D" parent="." unique_id=1193694970]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.2, -0.55999994)
+
+[node name="_MeshInstance3D_959" type="MeshInstance3D" parent="ElecDoor_JambL" unique_id=1413209313]
+material_override = SubResource("StandardMaterial3D_kxxey")
+mesh = SubResource("BoxMesh_f26w6")
+
+[node name="_CollisionShape3D_960" type="CollisionShape3D" parent="ElecDoor_JambL" unique_id=2081708821]
+shape = SubResource("BoxShape3D_f4acu")
+
+[node name="ElecDoor_JambR" type="StaticBody3D" parent="." unique_id=1505576028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.2, 0.5600004)
+
+[node name="_MeshInstance3D_961" type="MeshInstance3D" parent="ElecDoor_JambR" unique_id=1933153123]
+material_override = SubResource("StandardMaterial3D_kxxey")
+mesh = SubResource("BoxMesh_xxito")
+
+[node name="_CollisionShape3D_962" type="CollisionShape3D" parent="ElecDoor_JambR" unique_id=570195757]
+shape = SubResource("BoxShape3D_q1sld")
+
+[node name="ElecDoor_Header" type="StaticBody3D" parent="." unique_id=1379115561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 2.36, 0)
+
+[node name="_MeshInstance3D_963" type="MeshInstance3D" parent="ElecDoor_Header" unique_id=1864830133]
+material_override = SubResource("StandardMaterial3D_kxxey")
+mesh = SubResource("BoxMesh_nroer")
+
+[node name="_CollisionShape3D_964" type="CollisionShape3D" parent="ElecDoor_Header" unique_id=125193374]
+shape = SubResource("BoxShape3D_6qrqj")
+
+[node name="ElectricalRoomSign_Plate" type="StaticBody3D" parent="." unique_id=207775174]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.6800003, 2.65, 0)
+
+[node name="_MeshInstance3D_992" type="MeshInstance3D" parent="ElectricalRoomSign_Plate" unique_id=536969894]
+material_override = SubResource("StandardMaterial3D_pf73p")
+mesh = SubResource("BoxMesh_65v55")
+
+[node name="_CollisionShape3D_993" type="CollisionShape3D" parent="ElectricalRoomSign_Plate" unique_id=2084279894]
+shape = SubResource("BoxShape3D_14o71")
+
+[node name="ElectricalRoomSign_Label" type="Label3D" parent="." unique_id=1546625166]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.71, 2.65, 0)
+pixel_size = 0.0035
+modulate = Color(1, 0.95, 0.85, 1)
+text = "ELECTRICAL"
+font_size = 40
+outline_size = 0
+
+[node name="Divider_Elec_North" type="StaticBody3D" parent="." unique_id=989371958 groups=["authored_room_wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 3.325, 1.5500002)
+
+[node name="WallMesh_0" type="MeshInstance3D" parent="Divider_Elec_North" unique_id=234298557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0625)
+material_override = SubResource("StandardMaterial3D_sjovn")
+mesh = SubResource("BoxMesh_hq6n4")
+
+[node name="WallCollision_0" type="CollisionShape3D" parent="Divider_Elec_North" unique_id=1061239708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0625)
+shape = SubResource("BoxShape3D_h1ux7")
+
+[node name="Rooms_North" type="StaticBody3D" parent="." unique_id=1678459600 groups=["authored_room_wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.325, 2.5)
+
+[node name="WallMesh_0" type="MeshInstance3D" parent="Rooms_North" unique_id=633721979]
+material_override = SubResource("StandardMaterial3D_sjovn")
+mesh = SubResource("BoxMesh_wk2nv")
+
+[node name="WallCollision_0" type="CollisionShape3D" parent="Rooms_North" unique_id=418702185]
+shape = SubResource("BoxShape3D_w82jn")
+
+[node name="BreakerSign_Plate" type="StaticBody3D" parent="." unique_id=566646490]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.2299995, 2.5, -1)
+
+[node name="_MeshInstance3D_1022" type="MeshInstance3D" parent="BreakerSign_Plate" unique_id=676714221]
+material_override = SubResource("StandardMaterial3D_pf73p")
+mesh = SubResource("BoxMesh_n61md")
+
+[node name="_CollisionShape3D_1023" type="CollisionShape3D" parent="BreakerSign_Plate" unique_id=1309096966]
+shape = SubResource("BoxShape3D_m2ekn")
+
+[node name="BreakerSign_Label" type="Label3D" parent="." unique_id=266321695]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.199999, 2.5, -1)
+pixel_size = 0.0035
+modulate = Color(1, 0.95, 0.85, 1)
+text = "MAIN BREAKER"
+font_size = 40
+outline_size = 0
+
+[node name="CornerReturn_RoomsNW" type="StaticBody3D" parent="." unique_id=2143030839 groups=["authored_room_wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 3.325, 2.5)
+
+[node name="_MeshInstance3D_1436" type="MeshInstance3D" parent="CornerReturn_RoomsNW" unique_id=1503128649]
+material_override = SubResource("StandardMaterial3D_sjovn")
+mesh = SubResource("BoxMesh_l4s6g")
+
+[node name="_CollisionShape3D_1437" type="CollisionShape3D" parent="CornerReturn_RoomsNW" unique_id=1010212055]
+shape = SubResource("BoxShape3D_1nwpg")
+
+[node name="CornerReturn_RoomsNE" type="StaticBody3D" parent="." unique_id=1167751236 groups=["authored_room_wall"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 3.325, 2.5)
+
+[node name="_MeshInstance3D_1438" type="MeshInstance3D" parent="CornerReturn_RoomsNE" unique_id=962184980]
+material_override = SubResource("StandardMaterial3D_sjovn")
+mesh = SubResource("BoxMesh_6siru")
+
+[node name="_CollisionShape3D_1439" type="CollisionShape3D" parent="CornerReturn_RoomsNE" unique_id=1126082303]
+shape = SubResource("BoxShape3D_1vuw8")
+
+[node name="Doorway" type="Marker3D" parent="." unique_id=1128082119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 0)
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1170493258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0)
+
+[node name="_MeshInstance3D_16" type="MeshInstance3D" parent="Floor" unique_id=140961650]
+material_override = SubResource("ShaderMaterial_t78bm")
+mesh = SubResource("BoxMesh_kxxey")
+
+[node name="_CollisionShape3D_17" type="CollisionShape3D" parent="Floor" unique_id=54320315]
+shape = SubResource("BoxShape3D_f26w6")

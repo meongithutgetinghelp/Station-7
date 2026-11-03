@@ -1,0 +1,4 @@
+Built-in imagegen edit of entity-letter-v1.png.
+Prompt: Preserve exact message and distressed source glyph style; improve handwriting alignment and ink absorption; replace flat tan surface with visible paper pulp fibers, mottled grain, wrinkles, uneven creases, water stains, ingrained edge dirt and ragged fibrous edges. Tall isolated letter with transparent background.
+Final raster: entity-letter.png
+Original procedural source: entity-letter.html (v1; does not reproduce the imagegen texture revision).

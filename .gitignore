@@ -1,25 +1,56 @@
-# Godot 4.2+ specific ignores
-~*.dll
-
-# Godot 4+ specific ignores
-.godot/
-.nomedia
-
-# Godot-specific ignores
-.import/
-export.cfg
-export_credentials.cfg
-*.tmp
-
-# Imported translations (automatically generated from CSV files)
+# Godot 4.7.2 generated data. Keep .uid, .import and .gdignore sidecars.
+/.godot/
 *.translation
+/export_credentials.cfg
+/override.cfg
+/android/
+*.pck
 
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
+# Station 7 exports, authoring cache and local workspaces.
+/builds/
+/reports/
+/.claude/
+/.freebuff/
+/.serena/
+/.obsidian/
+/.vscode/
+/audio/pa/generated/
+/export_presets.cfg
+/ui/illustrations/station-charcoal-v1.prompt.json
+/assets/entity/README.md
+/assets/trains/subway/README.md
+/ui/fonts/Skyfont-NonCommercial.otf
+/ui/fonts/Skyfont-NonCommercial.otf.import
+/SECURITY_REPORT.md
 
-# Export outputs
-*.exe
-# Uncomment if your project does not version PCK files as runtime dependencies.
-# *.pck
+# OS metadata, editor backups and Python caches.
+.DS_Store
+__MACOSX/
+._*
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+*~
+*.log
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Internal notes with personal attribution.
+/PASSENGER_REDESIGN.md
+/ROADMAP.md
+/TODAY_CHANGELOG.md
+/PROGRESS.md
+/UI_ART_GUIDE.md

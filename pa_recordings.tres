@@ -1,0 +1,16 @@
+[gd_resource type="Resource" format=3 uid="uid://rtfas7fcd1sg"]
+
+[ext_resource type="Script" uid="uid://dqgvtdt4hll1c" path="res://pa_catalog.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://cuh366him0jjf" path="res://audio/pa/welcome.wav" id="2"]
+[ext_resource type="AudioStream" uid="uid://cepd2iualfom6" path="res://audio/pa/approach.wav" id="3"]
+[ext_resource type="AudioStream" uid="uid://cy28c8a43gisq" path="res://audio/pa/boarding.wav" id="4"]
+[ext_resource type="AudioStream" uid="uid://diwydjlsiyl6b" path="res://audio/pa/departure.wav" id="5"]
+[ext_resource type="AudioStream" uid="uid://4tp04en2j2s6" path="res://audio/pa/false_call.wav" id="6"]
+
+[resource]
+script = ExtResource("1")
+approach = ExtResource("3")
+boarding = ExtResource("4")
+departure = ExtResource("5")
+welcome = ExtResource("2")
+false_call = ExtResource("6")

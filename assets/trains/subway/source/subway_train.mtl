@@ -1,0 +1,81 @@
+newmtl steel
+Kd 0.72 0.74 0.78
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 144
+d 1.0
+
+newmtl dark
+Kd 0.07 0.07 0.08
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 80
+d 1.0
+
+newmtl cab
+Kd 0.09 0.09 0.11
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 130
+d 1.0
+
+newmtl blue
+Kd 0.16 0.3 0.78
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 130
+d 1.0
+
+newmtl red
+Kd 0.55 0.1 0.12
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 130
+d 1.0
+
+newmtl glass
+Kd 0.04 0.06 0.08
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 190
+d 0.85
+
+newmtl winlit
+Kd 0.95 0.9 0.75
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 120
+d 1.0
+Ke 1.0 0.92 0.75
+
+newmtl lamp
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 180
+d 1.0
+Ke 1.0 0.98 0.9
+
+newmtl tail
+Kd 1 0.1 0.1
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 180
+d 1.0
+Ke 1.0 0.1 0.08
+
+newmtl amber
+Kd 1.0 0.5 0.1
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 140
+d 1.0
+Ke 1.0 0.55 0.1
+
+newmtl yellow
+Kd 0.95 0.8 0.1
+Ka 0 0 0
+Ks 0.4 0.4 0.4
+Ns 100
+d 1.0
+
