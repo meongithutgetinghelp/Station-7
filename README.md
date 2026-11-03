@@ -6,36 +6,31 @@ Station 7 is a first-person cooperative horror game prototype where you and your
 
 ## Features
 
-- **Co-op multiplayer** — Play with up to four players over LAN or direct IP.
-- **Station duties** — Restore power, inspect tickets, clean the station, and repair electrical faults.
-- **Passenger inspection** — Check tickets and documents to identify suspicious passengers.
-- **CCTV monitoring** — Keep an eye on the station through its security cameras.
-- **Station incidents** — Respond to train arrivals and unexpected events throughout your shift.
-- **Campaign progression** — Work through seven nights as things become increasingly unsettling.
-- **Save system** — Resume your campaign from the host's saved checkpoint.
+- **Co-op multiplayer**: Play with up to four players over LAN or direct IP.
+- **Station duties**: Restore power, inspect tickets, clean the station, and repair electrical faults.
+- **Passenger inspection**: Check tickets and documents to identify suspicious passengers.
+- **CCTV monitoring**: Keep an eye on the station through its security cameras.
+- **Station incidents**: Respond to train arrivals and unexpected events throughout your shift.
+- **Campaign progression**: Work through seven nights as things become increasingly unsettling.
+- **Save system**: Resume your campaign from the host's saved checkpoint.
 
-## Getting Started
+## Download
 
-**Requirements**
+Download the standalone game build for your platform. **Godot is not required.**
 
-- Godot 4.7.2
-- A system that supports the project's Forward+ renderer
+- **Windows:** Coming soon
+- **macOS:** Coming soon
 
-**Setup**
+Extract the downloaded archive if necessary, then launch the game.
 
-1. Open Godot Project Manager.
-2. Import the project using `project.godot`.
-3. Wait for the assets to finish importing.
-4. Press **F5** to launch the game.
-
-**Playing with Friends**
+## Playing with Friends
 
 1. The host selects **Host Game** to create a lobby.
 2. Other players select **Join Game** and enter the host's IP address and port.
-3. Joining players mark themselves as ready.
+3. Everyone marks themselves as ready.
 4. The host starts a new campaign or resumes a saved one.
 
-The default multiplayer port is **UDP 27017**. All players should use the same project revision.
+The default multiplayer port is **UDP 27017**. All players should use the same game version.
 
 ## Controls
 
@@ -59,14 +54,16 @@ The following features are not yet implemented:
 - Host migration
 - Individual player revival
 
-For playtesting, use a trusted LAN connection. Multiplayer behavior and test commands are documented in the [co-op guide](docs/COOP.md).
+For playtesting, use a trusted LAN connection.
+
+For more information about multiplayer behavior and testing, see [COOP.md](docs/COOP.md).
 
 ## Project Structure
 
 | Folder | Description |
 | --- | --- |
-| [scenes/](scenes/) and [rooms/](rooms/) | Main scenes, shared resources, and room layouts |
-| [scripts/](scripts/) | Gameplay, networking, and station systems |
-| [assets/](assets/), [audio/](audio/), and [ui/](ui/) | Models, sound, and interface assets |
-| [tests/](tests/) and [tools/](tools/) | Automated checks and development tools |
-| [docs/](docs/) | Co-op setup, campaign design, and playtest notes |
+| `scenes/` and `rooms/` | Main scenes, shared resources, and room layouts |
+| `scripts/` | Gameplay, networking, and station systems |
+| `assets/`, `audio/`, and `ui/` | Models, sound, and interface assets |
+| `tests/` and `tools/` | Automated checks and development tools |
+| `docs/` | Co-op setup, campaign design, and playtest notes |
