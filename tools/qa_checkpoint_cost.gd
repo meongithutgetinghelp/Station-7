@@ -5,7 +5,7 @@ func run() -> void:
 	gm.set_process(false)
 	gm.start_night(2)
 	gm.save_path = "user://qa-checkpoint-cost.json"
-	var station = load("res://station_builder.tscn").instantiate()
+	var station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	gm.restore_power()
@@ -20,7 +20,7 @@ func run() -> void:
 	var successful := true
 	for iteration in range(28):
 		var start := Time.get_ticks_usec()
-		successful = preload("res://checkpoint_store.gd").write(gm.save_path + ".auto", gm._checkpoint_payload()) and successful
+		successful = preload("res://scripts/checkpoint_store.gd").write(gm.save_path + ".auto", gm._checkpoint_payload()) and successful
 		var milliseconds := (Time.get_ticks_usec() - start) / 1000.0
 		if iteration >= 3: samples.append(milliseconds)
 	var ordered := samples.duplicate()

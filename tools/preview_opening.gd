@@ -13,7 +13,7 @@ func run() -> void:
 	var gm := root.get_node("GameManager")
 	gm.set_process(false)
 	gm.new_campaign()
-	var station = load("res://station_builder.tscn").instantiate()
+	var station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	await capture("station-dark")

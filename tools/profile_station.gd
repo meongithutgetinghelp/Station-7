@@ -43,7 +43,7 @@ func run() -> void:
 	seed(77)
 	gm.new_campaign()
 	gm.set_process(false)
-	station = load("res://station_builder.tscn").instantiate()
+	station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	root.mode = Window.MODE_WINDOWED

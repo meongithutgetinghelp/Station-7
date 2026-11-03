@@ -11,7 +11,7 @@ func run() -> void:
 	var gm = root.get_node("GameManager")
 	gm.set_process(false)
 	gm.start_night(1)
-	station = load("res://station_builder.tscn").instantiate()
+	station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	var service = station.get_node("PassengerService")

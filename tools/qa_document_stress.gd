@@ -6,7 +6,7 @@ func _init() -> void: call_deferred("run")
 func snapshot(cycle: int) -> void:
 	samples.append({"cycle": cycle, "nodes": Performance.get_monitor(Performance.OBJECT_NODE_COUNT), "objects": Performance.get_monitor(Performance.OBJECT_COUNT), "static_bytes": OS.get_static_memory_usage(), "video_bytes": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)})
 func cycle_once(index: int) -> void:
-	var profile: Dictionary = preload("res://passenger_cases.gd").for_night(1, 0)[0].duplicate(true)
+	var profile: Dictionary = preload("res://scripts/passenger_cases.gd").for_night(1, 0)[0].duplicate(true)
 	profile.uid = "document-stress-%d" % index
 	desk.present_documents(profile)
 	for frame in range(3): await process_frame
@@ -20,7 +20,7 @@ func run() -> void:
 	var gm = root.get_node("GameManager")
 	gm.set_process(false)
 	gm.start_night(1)
-	station = load("res://station_builder.tscn").instantiate()
+	station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	gm.turn_on_power()

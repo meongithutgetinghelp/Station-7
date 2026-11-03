@@ -20,7 +20,7 @@ for suite in suites:
     with (output / f'{suite}.log').open('w') as log:
         try:
             result = subprocess.run([args.godot, '--headless', '--path', str(project),
-                                     '--fixed-fps', '60', '--script', f'{suite}_test_runner.gd'],
+                                     '--fixed-fps', '60', '--script', f'res://tests/{suite}_test_runner.gd'],
                                     stdout=log, stderr=subprocess.STDOUT, timeout=240 if suite == 'campaign_playthrough' else 90)
             status = result.returncode
         except subprocess.TimeoutExpired:

@@ -6,7 +6,7 @@ func run() -> void:
  var gm := root.get_node("GameManager")
  gm.start_night(1)
  gm.minutes_per_second = 0
- var station = load("res://station_builder.tscn").instantiate()
+ var station = load("res://scenes/station_builder.tscn").instantiate()
  root.add_child(station)
  current_scene = station
  var player = get_first_node_in_group("player")

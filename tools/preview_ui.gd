@@ -11,7 +11,7 @@ func capture(file: String) -> void:
 func run() -> void:
 	root.mode = Window.MODE_WINDOWED
 	root.size = Vector2i(1280, 720)
-	var menu = load("res://main_menu.tscn").instantiate()
+	var menu = load("res://scenes/main_menu.tscn").instantiate()
 	root.add_child(menu)
 	current_scene = menu
 	await create_timer(0.4, true).timeout

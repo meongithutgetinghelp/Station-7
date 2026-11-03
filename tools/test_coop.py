@@ -29,7 +29,7 @@ def launch(role, slot=0):
     log = (output / f"{role}{slot}.log").open("w")
     streams.append(log)
     cmd = [args.godot, "--headless", "--path", str(project), "--script",
-           "res://coop_test_runner.gd", "--", f"--role={role}", f"--slot={slot}",
+           "res://tests/coop_test_runner.gd", "--", f"--role={role}", f"--slot={slot}",
            f"--test-dir={output}", f"--port={port if role == 'host' or not relay else relay.port}"]
     process = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT)
     processes.append((role, slot, process))

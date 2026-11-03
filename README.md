@@ -23,4 +23,14 @@ Use **WASD** and the mouse to move and look, **E** to interact, **F** for the fl
 
 ## Prototype limitations
 
-Character art and animations are provisional. Internet invites, matchmaking, relay support, mid-shift joining, host migration, and individual player revival are unimplemented. Use a trusted LAN for playtesting. See [COOP.md](COOP.md) for session behavior and test commands.
+Character art and animations are provisional. Internet invites, matchmaking, relay support, mid-shift joining, host migration, and individual player revival are unimplemented. Use a trusted LAN for playtesting. See [COOP.md](docs/COOP.md) for session behavior and test commands.
+
+## Project layout
+
+| Folder | Contents |
+| --- | --- |
+| [scenes/](scenes/) and [rooms/](rooms/) | Main scenes, shared resources, and room layouts |
+| [scripts/](scripts/) | Gameplay, networking, and station systems |
+| [assets/](assets/), [audio/](audio/), and [ui/](ui/) | Models, sound, and interface assets |
+| [tests/](tests/) and [tools/](tools/) | Automated checks and development tools |
+| [docs/](docs/) | Co-op setup, campaign design, and playtest notes |

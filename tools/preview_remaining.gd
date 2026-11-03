@@ -10,7 +10,7 @@ func run() -> void:
 	var gm = root.get_node("GameManager")
 	gm.new_campaign()
 	gm.set_process(false)
-	var station = load("res://station_builder.tscn").instantiate()
+	var station = load("res://scenes/station_builder.tscn").instantiate()
 	root.add_child(station)
 	current_scene = station
 	gm.turn_on_power()

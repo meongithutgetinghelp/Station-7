@@ -21,3 +21,13 @@ absence rule is preserved. Routes, tickets and game decisions remain host-owned.
 Regenerate with Blender 5.1:
 `Blender --background --python tools/build_passenger_model.py`, then reimport the
 project in Godot. Keep the output's bone names and palette material names intact.
+
+## Project layout
+
+| Folder | Contents |
+| --- | --- |
+| [scenes/](scenes/) and [rooms/](rooms/) | Main scenes, shared resources, and room layouts |
+| [scripts/](scripts/) | Gameplay, networking, and station systems |
+| [assets/](assets/), [audio/](audio/), and [ui/](ui/) | Models, sound, and interface assets |
+| [tests/](tests/) and [tools/](tools/) | Automated checks and development tools |
+| [docs/](docs/) | Co-op setup, campaign design, and playtest notes |
