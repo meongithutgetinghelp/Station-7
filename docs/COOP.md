@@ -4,7 +4,7 @@ One player hosts the campaign; up to three teammates join. Use the same source/b
 
 ## Playing
 
-1. Choose **Host Game**, select a UDP port (default **27017**), and create the lobby.
+1. Choose **Host Game**, select a UDP port, and create the lobby.
 2. Teammates choose **Join Game**, enter the host computer's LAN IP address and the same port, then connect. `127.0.0.1` only connects to a host on the same computer.
 3. Each teammate presses Ready. The host chooses a new campaign or the host's saved campaign.
 4. The shift starts when all connected machines finish loading. The lobby locks during gameplay.
